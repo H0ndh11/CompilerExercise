@@ -23,11 +23,20 @@ void VirtualMachine::run()
 
 	while (true)
 	{
+		//codeのpc番目を命令としてinstにいれる
 		Inst inst = code.at(pc++);
+
+		//命令種類(inst.opcode)によって分岐
 		switch (inst.opcode)
 		{
 		case ret:
 			runRet(inst);
+			break;
+		case lit:
+			runLit(inst);
+			break;
+		case opr:
+			runOpr(inst);
 			break;
 		default:
 			break;
@@ -51,6 +60,41 @@ void VirtualMachine::runRet(Inst inst)
 	top -= inst.numParams;
 
 	pushStack(result);
+}
+
+//lit命令を実行する関数
+void VirtualMachine::runLit(Inst inst) {
+	//値部分(inst.value)をスタックに積む
+	pushStack(inst.value);
+}
+
+//wrt命令や演算子などの命令を判別しサブルーチンを呼ぶ関数
+void VirtualMachine::runOpr(Inst inst) {
+	//具体的な命令内容(inst.opr)によって分岐
+	switch (inst.opr) {
+	case wrt:
+		runOprWrt();
+		break;
+	case wrl:
+		runOprWrl();
+		break;
+	default:
+		break;
+	}
+}
+
+//wrt命令を実行する関数
+void VirtualMachine::runOprWrt() {
+	//スタックのトップにある値をvalueへ
+	int value = popStack();
+	//valueをstring型にしてから出力内容outputに追加
+	output += std::to_string(value);
+}
+
+//wrl命令を実行する関数
+void VirtualMachine::runOprWrl() {
+	//改行を出力結果outputに追加
+	output += "\n";
 }
 
 void VirtualMachine::pushStack(int value) {

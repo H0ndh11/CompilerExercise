@@ -13,14 +13,14 @@
     <TestDuration Test="_3_ArithmeticCalc.RunOprNeg" Duration="1" />
     <TestDuration Test="_3_ArithmeticCalc.RunOprs" Duration="1" />
     <TestDuration Test="_3_ArithmeticCalc.Plus_Times" Duration="1" />
-    <TestDuration Test="_3_ArithmeticCalc.Minus_with_Parenthesis" Duration="1" />
-    <TestDuration Test="_3_ArithmeticCalc.Div_Unary_Plus" Duration="1" />
+    <TestDuration Test="_3_ArithmeticCalc.Minus_with_Parenthesis" Duration="0" />
+    <TestDuration Test="_3_ArithmeticCalc.Div_Unary_Plus" Duration="2" />
     <TestDuration Test="_3_ArithmeticCalc.Left_Join" Duration="1" />
-    <TestDuration Test="_3_ArithmeticCalc.Unary_Minus_Times" Duration="18" />
-    <TestDuration Test="_4_Begin_End.Tokenize" Duration="1" />
+    <TestDuration Test="_3_ArithmeticCalc.Unary_Minus_Times" Duration="1" />
+    <TestDuration Test="_4_Begin_End.Tokenize" Duration="21" />
     <TestDuration Test="_4_Begin_End.Run_Being_End" Duration="1" />
     <TestDuration Test="_5_If_Then.Tokenize_if_then_odd" Duration="1" />
-    <TestDuration Test="_5_If_Then.Tokenize_comps" Duration="30" />
+    <TestDuration Test="_5_If_Then.Tokenize_comps" Duration="35" />
     <TestDuration Test="_5_If_Then.Check_comp" Duration="3" />
     <TestDuration Test="_5_If_Then.Check_Odd" Duration="1" />
     <TestDuration Test="_5_If_Then.Run_Jpc" Duration="1" />
@@ -34,7 +34,7 @@
     <TestDuration Test="_7_Var.Tokenize" Duration="1" />
     <TestDuration Test="_7_Var.Run_Jmp" Duration="1" />
     <TestDuration Test="_7_Var.Run_Ict_Sto_Lod" Duration="1" />
-    <TestDuration Test="_7_Var.Run_Code" Duration="1" />
+    <TestDuration Test="_7_Var.Run_Code" Duration="2" />
     <TestDuration Test="_8_While.Tokenize" Duration="1" />
     <TestDuration Test="_8_While.Run_Code" Duration="1" />
     <TestDuration Test="_8_While.CalcFibonacci" Duration="1" />
