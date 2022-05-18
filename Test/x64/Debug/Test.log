@@ -1,4 +1,0 @@
-﻿  test.cpp
-C:\Users\keisu\source\repos\CompilerExercise\CompilerExercise\CodeBuilder.cpp(19,24): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-C:\Users\keisu\source\repos\CompilerExercise\CompilerExercise\VirtualMachine.cpp(21,20): warning C4267: '=': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-  Test.vcxproj -> C:\Users\keisu\source\repos\CompilerExercise\x64\Debug\Test.exe
