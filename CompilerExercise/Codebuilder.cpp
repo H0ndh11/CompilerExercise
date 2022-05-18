@@ -34,3 +34,23 @@ int CodeBuilder::emitOprWrt() {
 int CodeBuilder::emitOprWrtLn() {
 	return emit(Inst(opr, wrl, 0, 0, 0, 0, 0));
 }
+
+int CodeBuilder::emitOprNeg() {
+	return emit(Inst(opr, neg, 0, 0, 0, 0, 0));
+}
+
+int CodeBuilder::emitOprAdd() {
+	return emit(Inst(opr, add, 0, 0, 0, 0, 0));
+}
+
+int CodeBuilder::emitOprSub() {
+	return emit(Inst(opr, sub, 0, 0, 0, 0, 0));
+}
+
+int CodeBuilder::emitOprMul() {
+	return emit(Inst(opr, mul, 0, 0, 0, 0, 0));
+}
+
+int CodeBuilder::emitOprDiv() {
+	return emit(Inst(opr, divi, 0, 0, 0, 0, 0));
+}

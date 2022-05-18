@@ -78,6 +78,21 @@ void VirtualMachine::runOpr(Inst inst) {
 	case wrl:
 		runOprWrl();
 		break;
+	case neg:
+		runOprNeg();
+		break;
+	case add:
+		runOprAdd();
+		break;
+	case sub:
+		runOprSub();
+		break;
+	case mul:
+		runOprMul();
+		break;
+	case divi:
+		runOprDivi();
+		break;
 	default:
 		break;
 	}
@@ -95,6 +110,40 @@ void VirtualMachine::runOprWrt() {
 void VirtualMachine::runOprWrl() {
 	//改行を出力結果outputに追加
 	output += "\n";
+}
+
+//neg命令を実行する関数
+void VirtualMachine::runOprNeg() {
+	int rhs = popStack();
+	pushStack(-rhs);
+}
+
+//add命令を実行する関数
+void VirtualMachine::runOprAdd() {
+	int rhs = popStack();
+	int lhs = popStack();
+	pushStack(lhs + rhs);
+}
+
+//sub命令を実行する関数
+void VirtualMachine::runOprSub() {
+	int rhs = popStack();
+	int lhs = popStack();
+	pushStack(lhs - rhs);
+}
+
+//mul命令を実行する関数
+void VirtualMachine::runOprMul() {
+	int rhs = popStack();
+	int lhs = popStack();
+	pushStack(lhs * rhs);
+}
+
+//divi命令を実行する関数
+void VirtualMachine::runOprDivi() {
+	int rhs = popStack();
+	int lhs = popStack();
+	pushStack(lhs / rhs);
 }
 
 void VirtualMachine::pushStack(int value) {
