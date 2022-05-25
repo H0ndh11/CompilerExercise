@@ -80,6 +80,11 @@ Token Source::nextToken() {
 			Token tk = { Rparen,"",0 };
 			return tk;
 		}
+		else if (ch == ';') {
+			nextChar();
+			Token tk = { Semicolon,"",0 };
+			return tk;
+		}
 	}
 	
 
@@ -126,6 +131,16 @@ Token Source::nextIdentifierOrKeywordToken() {
 			Token tk = { WriteLn, "",0 };
 			return tk;
 		}
+		//beginならbeginトークン
+		else if (value == "begin") {
+			Token tk = { Begin, "", 0 };
+			return tk;
+		}
+		//endならendトークン
+		else if (value == "end") {
+			Token tk = { End, "", 0 };
+			return tk;
+		}
 	}
 
 
@@ -135,9 +150,9 @@ Token Source::nextIdentifierOrKeywordToken() {
 	return tk;
 }
 
-//cが1文字でトークンになる記号( ., +. -, *, /, (, ) )ならtrueを返す関数
+//cが1文字でトークンになる記号( ., +. -, *, /, (, ), ; )ならtrueを返す関数
 bool Source::isSymbolToken(char c) {
-	if (c == '.' || c == '+' || c == '-' || c == '*' || c == '/' || c == '(' || c == ')') {
+	if (c == '.' || c == '+' || c == '-' || c == '*' || c == '/' || c == '(' || c == ')'|| c==';') {
 		return true;
 	}
 	else {
@@ -145,9 +160,9 @@ bool Source::isSymbolToken(char c) {
 	}
 }
 
-//strが予約語（writeやwriteln)の場合，trueを返す関数
+//strが予約語（writeやwriteln, begin, end)の場合，trueを返す関数
 bool Source::isKeyword(std::string& str) {
-	if (str == "write" || str == "writeln") {
+	if (str == "write" || str == "writeln"|| str == "begin" || str == "end") {
 		return true;
 	}
 	else {

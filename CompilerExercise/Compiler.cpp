@@ -40,6 +40,10 @@ void Compiler::compileStatement() {
 		nextToken();
 		compileWriteLn();
 		break;
+	case Begin:
+		nextToken();
+		compileBeginEnd();
+		break;
 	default:
 		break;
 	}
@@ -54,7 +58,7 @@ void Compiler::compileWrite() {
 
 	compileExpression();
 	codebuilder.emitOprWrt();
-	nextToken();
+	//nextToken();
 
 	
 	/*if (source.source != ".") {
@@ -69,7 +73,7 @@ void Compiler::compileWrite() {
 
 void Compiler::compileWriteLn() {
 	codebuilder.emitOprWrtLn();
-	nextToken();
+	//nextToken();
 }
 
 void Compiler::compileExpression() {
@@ -154,4 +158,30 @@ void Compiler::compileFactor() {
 	//数値が(expression)以外なら文法エラー
 	std::cerr << "Syntax error\n";
 	exit(1);
+}
+
+void Compiler::compileBeginEnd() {
+	while (true) {
+		//statement; という形の間，つまり';'が続く限りループ(図2.30参考)
+		compileStatement();
+		if (token.kind == Semicolon) {
+			nextToken();
+			continue;
+		}
+		ensureToken(End);
+		break;
+	}
+}
+
+Token Compiler::ensureToken(KeyId kind) {
+	Token _token = token;
+
+	//_token.kindとkindが一致しない時にエラー
+	if (_token.kind != kind) {
+		std::cerr << "Syntax error" << kind << "\n";
+		exit(1);
+	}
+
+	nextToken();
+	return _token; //確認したトークンを返す
 }
