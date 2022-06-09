@@ -85,6 +85,45 @@ Token Source::nextToken() {
 			Token tk = { Semicolon,"",0 };
 			return tk;
 		}
+		else if (ch == '<') {
+			nextChar();
+			//等号が後ろにある場合，つまり"<="であった場合
+			if (ch == '=') {
+				nextChar();
+				Token tk = { LssEq, "", 0};
+				return tk;
+			}
+			//大なりが後ろにある場合，つまり"<>"であった場合
+			else if (ch == '>') {
+				nextChar();
+				Token tk = { NotEq, "",0 };
+				return tk;
+			}
+			//'<'だけの場合
+			else {
+				Token tk = { Lss, "", 0 };
+				return tk;
+			}
+		}
+		else if (ch == '>') {
+			nextChar();
+			//等号が後ろにある場合，つまり">="であった場合
+			if (ch == '=') {
+				nextChar();
+				Token tk = { GtrEq, "", 0 };
+				return tk;
+			}
+			//'>'だけの場合
+			else {
+				Token tk = { Gtr, "", 0 };
+				return tk;
+			}
+		}
+		else if (ch == '=') {
+			nextChar();
+			Token tk = { Equal, "", 0 };
+			return tk;
+		}
 	}
 	
 
@@ -141,6 +180,21 @@ Token Source::nextIdentifierOrKeywordToken() {
 			Token tk = { End, "", 0 };
 			return tk;
 		}
+		//if
+		else if (value == "if") {
+			Token tk = { If, "", 0 };
+			return tk;
+		}
+		//Then
+		else if (value == "then") {
+			Token tk = { Then, "", 0 };
+			return tk;
+		}
+		//Odd
+		else if (value == "odd") {
+			Token tk = { Odd, "", 0 };
+			return tk;
+		}
 	}
 
 
@@ -152,7 +206,7 @@ Token Source::nextIdentifierOrKeywordToken() {
 
 //cが1文字でトークンになる記号( ., +. -, *, /, (, ), ; )ならtrueを返す関数
 bool Source::isSymbolToken(char c) {
-	if (c == '.' || c == '+' || c == '-' || c == '*' || c == '/' || c == '(' || c == ')'|| c==';') {
+	if (c == '.' || c == '+' || c == '-' || c == '*' || c == '/' || c == '(' || c == ')'|| c ==';' || c=='<' || c == '>' || c == '=') {
 		return true;
 	}
 	else {
@@ -162,7 +216,7 @@ bool Source::isSymbolToken(char c) {
 
 //strが予約語（writeやwriteln, begin, end)の場合，trueを返す関数
 bool Source::isKeyword(std::string& str) {
-	if (str == "write" || str == "writeln"|| str == "begin" || str == "end") {
+	if (str == "write" || str == "writeln"|| str == "begin" || str == "end" || str == "if" || str == "then" || str=="odd") {
 		return true;
 	}
 	else {

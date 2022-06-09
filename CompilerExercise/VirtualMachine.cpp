@@ -38,6 +38,9 @@ void VirtualMachine::run()
 		case opr:
 			runOpr(inst);
 			break;
+		case jpc:
+			runJpc(inst);
+			break;
 		default:
 			break;
 
@@ -93,6 +96,27 @@ void VirtualMachine::runOpr(Inst inst) {
 	case divi:
 		runOprDivi();
 		break;
+	case odd:
+		runOprOdd();
+		break;
+	case eq:
+		runOprEq();
+		break;
+	case neq:
+		runOprNeq();
+		break;
+	case ls:
+		runOprLt();
+		break;
+	case lseq:
+		runOprLteq();
+		break;
+	case gr:
+		runOprGr();
+		break;
+	case greq:
+		runOprGreq();
+		break;
 	default:
 		break;
 	}
@@ -146,6 +170,7 @@ void VirtualMachine::runOprDivi() {
 	pushStack(lhs / rhs);
 }
 
+//スタックへプッシュ
 void VirtualMachine::pushStack(int value) {
 	if (stack.size() <= top) {
 		stack.push_back(value);
@@ -155,9 +180,63 @@ void VirtualMachine::pushStack(int value) {
 	}
 }
 
+//スタックからポップ
 int VirtualMachine::popStack()
 {
 	return stack.at(--top); 
 }
 
+//スタックの戦闘の偶奇判別のodd命令を実行する関数
+void VirtualMachine::runOprOdd() {
+	pushStack(popStack() % 2);
+}
 
+//スタックから値2つを取り出し，等しいか比較するeq命令の関数
+void VirtualMachine::runOprEq() {
+	int rhs = popStack();
+	int lhs = popStack();
+	pushStack(rhs == lhs);
+}
+
+//eq命令の逆
+void VirtualMachine::runOprNeq() {
+	int rhs = popStack();
+	int lhs = popStack();
+	pushStack(rhs != lhs);
+}
+
+//2回ポップし，後の方が小さい場合1を返すlss命令を実行する関数
+void VirtualMachine::runOprLt() {
+	int rhs = popStack();
+	int lhs = popStack();
+	pushStack(rhs > lhs);
+}
+
+//2回ポップし，後の方が先の値以下の場合1を返すlsseq命令を実行する関数
+void VirtualMachine::runOprLteq() {
+	int rhs = popStack();
+	int lhs = popStack();
+	pushStack(rhs >= lhs);
+}
+
+//2回ポップし，後の方が大きい場合1を返すgtr命令を実行する関数
+void VirtualMachine::runOprGr() {
+	int rhs = popStack();
+	int lhs = popStack();
+	pushStack(rhs < lhs);
+}
+
+//2回ポップし，後の方が先の値以上の場合1を返すgtreq命令を実行する関数
+void VirtualMachine::runOprGreq() {
+	int rhs = popStack();
+	int lhs = popStack();
+	pushStack(rhs <= lhs);
+}
+
+//if文で用いられるjpc命令を実行する関数
+void VirtualMachine::runJpc(Inst inst) {
+	int value = popStack();
+	if (value == 0) {
+		pc = inst.index;
+	}
+}

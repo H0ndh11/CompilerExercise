@@ -15,6 +15,7 @@ std::vector<Inst> CodeBuilder::getCode() {
 }
 
 int CodeBuilder::emit(Inst inst) {
+	currentIndex++;
 	code.push_back(inst);
 	return code.size() - 1;
 }
@@ -53,4 +54,41 @@ int CodeBuilder::emitOprMul() {
 
 int CodeBuilder::emitOprDiv() {
 	return emit(Inst(opr, divi, 0, 0, 0, 0, 0));
+}
+
+int CodeBuilder::emitOprEq() {
+	return emit(Inst(opr, eq, 0, 0, 0, 0, 0));
+}
+
+int CodeBuilder::emitOprNeq() {
+	return emit(Inst(opr, neq, 0, 0, 0, 0, 0));
+}
+
+int CodeBuilder::emitOprLs() {
+	return emit(Inst(opr, ls, 0, 0, 0, 0, 0));
+}
+
+int CodeBuilder::emitOprGr() {
+	return emit(Inst(opr, gr, 0, 0, 0, 0, 0));
+}
+
+int CodeBuilder::emitOprLseq() {
+	return emit(Inst(opr, lseq, 0, 0, 0, 0, 0));
+}
+
+int CodeBuilder::emitOprGreq() {
+	return emit(Inst(opr, greq, 0, 0, 0, 0, 0));
+}
+
+int CodeBuilder::emitOprOdd() {
+	return emit(Inst(opr, odd, 0, 0, 0, 0, 0));
+}
+
+int CodeBuilder::emitJpc(int index) {
+	return emit(Inst(jpc, nop, 0, 0, 0, index, 0));
+}
+
+void CodeBuilder::backPatch(int jmpInstIndex, int newIndex) {
+	//³‚µ‚¢ƒWƒƒƒ“ƒvæ‚ğindex‚Éİ’è‚·‚é
+	code.at(jmpInstIndex).index = newIndex;
 }

@@ -18,6 +18,7 @@ void Compiler::nextToken() {
 Compiler::~Compiler()
 {
 }
+
 std::vector<Inst> Compiler::compile()
 {
 	compileBlock();
@@ -184,4 +185,58 @@ Token Compiler::ensureToken(KeyId kind) {
 
 	nextToken();
 	return _token; //確認したトークンを返す
+}
+
+void Compiler::compileIf() {
+	compileCondition();
+	ensureToken(Then);
+	int jpcInst = codebuilder.emitJpc(0);
+	compileStatement();
+	codebuilder.backPatch(jpcInst, codebuilder.currentIndex);
+}
+
+void Compiler::compileCondition() {
+	if (token.kind == Odd) {
+		nextToken();
+		compileExpression();
+		codebuilder.emitOprOdd();
+	}
+	else {
+		compileExpression();
+		switch (token.kind)
+		{
+		case Equal:
+			nextToken();
+			compileExpression();
+			codebuilder.emitOprEq();
+			break;
+		case NotEq:
+			nextToken();
+			compileExpression();
+			codebuilder.emitOprNeg();
+			break;
+		case Lss:
+			nextToken();
+			compileExpression();
+			codebuilder.emitOprLs();
+			break;
+		case LssEq:
+			nextToken();
+			compileExpression();
+			codebuilder.emitOprLseq();
+			break;
+		case Gtr:
+			nextToken();
+			compileExpression();
+			codebuilder.emitOprGr();
+			break;
+		case GtrEq:
+			nextToken();
+			compileExpression();
+			codebuilder.emitOprGreq();
+			break;
+		default:
+			break;
+		}
+	}
 }
