@@ -45,6 +45,10 @@ void Compiler::compileStatement() {
 		nextToken();
 		compileBeginEnd();
 		break;
+	case If:
+		nextToken();
+		compileIf();
+		break;
 	default:
 		break;
 	}
@@ -213,7 +217,7 @@ void Compiler::compileCondition() {
 		case NotEq:
 			nextToken();
 			compileExpression();
-			codebuilder.emitOprNeg();
+			codebuilder.emitOprNeq();
 			break;
 		case Lss:
 			nextToken();

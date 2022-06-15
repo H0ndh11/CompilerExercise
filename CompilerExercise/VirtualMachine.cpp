@@ -188,7 +188,8 @@ int VirtualMachine::popStack()
 
 //スタックの戦闘の偶奇判別のodd命令を実行する関数
 void VirtualMachine::runOprOdd() {
-	pushStack(popStack() % 2);
+	int rhs = popStack();
+	pushStack(rhs % 2);
 }
 
 //スタックから値2つを取り出し，等しいか比較するeq命令の関数

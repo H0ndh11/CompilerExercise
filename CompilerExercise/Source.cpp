@@ -21,7 +21,7 @@ char Source::nextChar() {
 
 //chがスペース，改行，tabならスキップ
 void Source::skipSpaces() {
-	while (ch == ' '||ch=='\n'||ch=='	') {
+	while (ch == ' '||ch=='\n'||ch=='\t') {
 		nextChar();
 	}
 }
@@ -204,7 +204,7 @@ Token Source::nextIdentifierOrKeywordToken() {
 	return tk;
 }
 
-//cが1文字でトークンになる記号( ., +. -, *, /, (, ), ; )ならtrueを返す関数
+//cが1文字でトークンになる記号( ., +. -, *, /, (, ), ; など)ならtrueを返す関数
 bool Source::isSymbolToken(char c) {
 	if (c == '.' || c == '+' || c == '-' || c == '*' || c == '/' || c == '(' || c == ')'|| c ==';' || c=='<' || c == '>' || c == '=') {
 		return true;
@@ -214,7 +214,7 @@ bool Source::isSymbolToken(char c) {
 	}
 }
 
-//strが予約語（writeやwriteln, begin, end)の場合，trueを返す関数
+//strが予約語（writeやwriteln, begin, endなど)の場合，trueを返す関数
 bool Source::isKeyword(std::string& str) {
 	if (str == "write" || str == "writeln"|| str == "begin" || str == "end" || str == "if" || str == "then" || str=="odd") {
 		return true;
