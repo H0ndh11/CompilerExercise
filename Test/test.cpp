@@ -487,23 +487,6 @@ TEST(_7_Var, Tokenize) {
 	EXPECT_EQ(tokenizer.nextToken().kind, nul);
 }
 
-TEST(_7_Var, Run_Jmp) {
-	std::vector<Inst> code;
-	code.push_back(Inst(ict, nop, 2, 0, 0, 0, 0));
-	code.push_back(Inst(jmp, nop, 0, 0, 0, 4, 0));
-	code.push_back(Inst(lit, nop, 123, 0, 0, 0, 0));
-	code.push_back(Inst(opr, wrt, 0, 0, 0, 0, 0));
-	code.push_back(Inst(lit, nop, 456, 0, 0, 0, 0));
-	code.push_back(Inst(opr, wrt, 0, 0, 0, 0, 0));
-	code.push_back(Inst(ret, nop, 0, 0, 0, 0, 0));
-
-	VirtualMachine vm = VirtualMachine(code);
-	vm.run();
-
-	EXPECT_EQ(vm.pc, 0);
-	EXPECT_EQ(vm.output, "456");
-
-}
 
 TEST(_7_Var, Run_Ict_Sto_Lod) {
 	std::vector<Inst> code;
@@ -550,6 +533,24 @@ TEST(_8_While, Tokenize) {
 	EXPECT_EQ(tokenizer.nextToken().kind, While);
 	EXPECT_EQ(tokenizer.nextToken().kind, Do);
 	EXPECT_EQ(tokenizer.nextToken().kind, nul);
+}
+
+TEST(_8_While, Run_Jmp) {
+	std::vector<Inst> code;
+	code.push_back(Inst(ict, nop, 2, 0, 0, 0, 0));
+	code.push_back(Inst(jmp, nop, 0, 0, 0, 4, 0));
+	code.push_back(Inst(lit, nop, 123, 0, 0, 0, 0));
+	code.push_back(Inst(opr, wrt, 0, 0, 0, 0, 0));
+	code.push_back(Inst(lit, nop, 456, 0, 0, 0, 0));
+	code.push_back(Inst(opr, wrt, 0, 0, 0, 0, 0));
+	code.push_back(Inst(ret, nop, 0, 0, 0, 0, 0));
+
+	VirtualMachine vm = VirtualMachine(code);
+	vm.run();
+
+	EXPECT_EQ(vm.pc, 0);
+	EXPECT_EQ(vm.output, "456");
+
 }
 
 TEST(_8_While, Run_Code) {
@@ -734,7 +735,7 @@ TEST(_9_Function, Multiply_Function) {
 		"  end; "
 		"       "
 		"  const m = 7, n = 85; "
-		"  var x, y; " 
+		"  var x, y; "
 		"        "
 		"  begin "
 		"    x := m; "
