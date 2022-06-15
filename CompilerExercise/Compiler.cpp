@@ -45,6 +45,7 @@ void Compiler::compileStatement() {
 		nextToken();
 		compileBeginEnd();
 		break;
+	//step5ではこれも忘れずに！（資料に記載なし）
 	case If:
 		nextToken();
 		compileIf();

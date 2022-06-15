@@ -47,62 +47,51 @@ Token Source::nextToken() {
 		//各記号に応じてトークンを返す
 		if (ch == '.') {
 			nextChar();
-			Token tk = { Period, "", 0 };
-			return tk;
+			return { Period, "", 0 };
 		}
 		else if (ch == '+') {
 			nextChar();
-			Token tk = { Plus,"",0 };
-			return tk;
+			return { Plus,"",0 };
 		}
 		else if (ch == '-') {
 			nextChar();
-			Token tk = { Minus,"",0 };
-			return tk;
+			return { Minus,"",0 };
 		}
 		else if (ch == '*') {
 			nextChar();
-			Token tk = { Mult,"",0 };
-			return tk;
+			return { Mult,"",0 };
 		}
 		else if (ch == '/') {
 			nextChar();
-			Token tk = { Div,"",0 };
-			return tk;
+			return { Div,"",0 };
 		}
 		else if (ch == '(') {
 			nextChar();
-			Token tk = { Lparen,"",0 };
-			return tk;
+			return { Lparen,"",0 };
 		}
 		else if (ch == ')') {
 			nextChar();
-			Token tk = { Rparen,"",0 };
-			return tk;
+			return { Rparen,"",0 };
 		}
 		else if (ch == ';') {
 			nextChar();
-			Token tk = { Semicolon,"",0 };
-			return tk;
+			return { Semicolon,"",0 };
 		}
 		else if (ch == '<') {
 			nextChar();
 			//等号が後ろにある場合，つまり"<="であった場合
 			if (ch == '=') {
 				nextChar();
-				Token tk = { LssEq, "", 0};
-				return tk;
+				return { LssEq, "", 0};
 			}
 			//大なりが後ろにある場合，つまり"<>"であった場合
 			else if (ch == '>') {
 				nextChar();
-				Token tk = { NotEq, "",0 };
-				return tk;
+				return { NotEq, "",0 };
 			}
 			//'<'だけの場合
 			else {
-				Token tk = { Lss, "", 0 };
-				return tk;
+				return { Lss, "", 0 };
 			}
 		}
 		else if (ch == '>') {
@@ -110,19 +99,20 @@ Token Source::nextToken() {
 			//等号が後ろにある場合，つまり">="であった場合
 			if (ch == '=') {
 				nextChar();
-				Token tk = { GtrEq, "", 0 };
-				return tk;
+				return { GtrEq, "", 0 };
 			}
 			//'>'だけの場合
 			else {
-				Token tk = { Gtr, "", 0 };
-				return tk;
+				return { Gtr, "", 0 };
 			}
 		}
 		else if (ch == '=') {
 			nextChar();
-			Token tk = { Equal, "", 0 };
-			return tk;
+			return { Equal, "", 0 };
+		}
+		else if (ch == ',') {
+			nextChar();
+			return { Comma, "", 0 };
 		}
 	}
 	
@@ -162,51 +152,46 @@ Token Source::nextIdentifierOrKeywordToken() {
 	if (isKeyword(value)) {
 		//valueがwriteならWriteトークンを返す
 		if (value == "write") {
-			Token tk = { Write,"",0 };
-			return tk;
+			return { Write,"",0 };
 		}
 		//writelnならWriteLnトークンを返す
 		else if (value == "writeln") {
-			Token tk = { WriteLn, "",0 };
-			return tk;
+			return { WriteLn, "",0 };
 		}
 		//beginならbeginトークン
 		else if (value == "begin") {
-			Token tk = { Begin, "", 0 };
-			return tk;
+			return { Begin, "", 0 };
 		}
 		//endならendトークン
 		else if (value == "end") {
-			Token tk = { End, "", 0 };
-			return tk;
+			return { End, "", 0 };
 		}
 		//if
 		else if (value == "if") {
-			Token tk = { If, "", 0 };
-			return tk;
+			return { If, "", 0 };
 		}
-		//Then
+		//then
 		else if (value == "then") {
-			Token tk = { Then, "", 0 };
-			return tk;
+			return { Then, "", 0 };
 		}
-		//Odd
+		//odd
 		else if (value == "odd") {
-			Token tk = { Odd, "", 0 };
-			return tk;
+			return { Odd, "", 0 };
+		}
+		//const
+		else if (value == "const") {
+			return { Const, "", 0 };
 		}
 	}
 
-
-	//それ以外はIdとしてトークンを返す
-	//資料と違うので注意
-	Token tk = { Id, "", 0};
-	return tk;
+	//それ以外は変数(Id)としてトークンを返す
+	//資料と違うので注意(step5以前)
+	return { Id, value, 0};
 }
 
 //cが1文字でトークンになる記号( ., +. -, *, /, (, ), ; など)ならtrueを返す関数
 bool Source::isSymbolToken(char c) {
-	if (c == '.' || c == '+' || c == '-' || c == '*' || c == '/' || c == '(' || c == ')'|| c ==';' || c=='<' || c == '>' || c == '=') {
+	if (c == '.' || c == '+' || c == '-' || c == '*' || c == '/' || c == '(' || c == ')'|| c ==';' || c=='<' || c == '>' || c == '='|| c==',') {
 		return true;
 	}
 	else {
@@ -216,7 +201,7 @@ bool Source::isSymbolToken(char c) {
 
 //strが予約語（writeやwriteln, begin, endなど)の場合，trueを返す関数
 bool Source::isKeyword(std::string& str) {
-	if (str == "write" || str == "writeln"|| str == "begin" || str == "end" || str == "if" || str == "then" || str=="odd") {
+	if (str == "write" || str == "writeln"|| str == "begin" || str == "end" || str == "if" || str == "then" || str=="odd"|| str=="const") {
 		return true;
 	}
 	else {
