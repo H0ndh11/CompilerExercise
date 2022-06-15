@@ -11,7 +11,7 @@ TableEntry NameTable::search(std::string& name) {
 	//table‚ğ––”ö‚©‚çŒŸõ‚µ‚Ä‚¢‚­
 	//‚à‚µentry‚É‘Î‚µ‚Äentry.name‚Æname‚ªˆê’v‚µ‚Ä‚¢‚½‚ç‚»‚Ìentry‚ğ•Ô‚·
 	for (size_t i = 0; i < table.size(); i++) {
-		TableEntry entry = table.at(i);
+		TableEntry entry = table.at(table.size() - 1 - i);
 		if (entry.name == name) {
 			return entry;
 		}
