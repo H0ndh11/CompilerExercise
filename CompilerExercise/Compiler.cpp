@@ -175,8 +175,9 @@ void Compiler::compileFactor() {
 		return;
 	}
 	else if(token.kind == Id) {
+		std::string name = token.id;
 		nextToken();
-		compileIdentifier(token.id);
+		compileIdentifier(name);
 		return;
 	}
 	//数値が(expression)以外なら文法エラー
