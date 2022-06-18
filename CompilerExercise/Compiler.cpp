@@ -27,6 +27,19 @@ std::vector<Inst> Compiler::compile()
 }
 
 void Compiler::compileBlock() {
+	//ConstDeclが0回以上ループ
+	while (true) {
+		if (token.kind == Const) {
+			nextToken();
+			compileConstDecl();
+			continue;
+		}
+		else {
+			break;
+		}
+	}
+
+	//Statementへ
 	compileStatement();
 	codebuilder.emitRet(0, 0);
 }
@@ -45,6 +58,7 @@ void Compiler::compileStatement() {
 		nextToken();
 		compileBeginEnd();
 		break;
+	//step5ではこれも忘れずに！（資料に記載なし）
 	case If:
 		nextToken();
 		compileIf();
@@ -150,7 +164,7 @@ void Compiler::compileFactor() {
 		nextToken();
 		return;
 	}
-	if (token.kind == Lparen) {
+	else if (token.kind == Lparen) {
 		nextToken();
 		compileExpression();
 		//この段階でトークンがRparenではなかったらプログラム停止
@@ -158,6 +172,12 @@ void Compiler::compileFactor() {
 			exit(1);
 		}
 		nextToken();
+		return;
+	}
+	else if(token.kind == Id) {
+		std::string name = token.id;
+		nextToken();
+		compileIdentifier(name);
 		return;
 	}
 	//数値が(expression)以外なら文法エラー
@@ -242,5 +262,39 @@ void Compiler::compileCondition() {
 		default:
 			break;
 		}
+	}
+}
+
+void Compiler::compileConstDecl() {
+	while (true) {
+		//定数宣言の構文解析
+		//x = 10 のようにId, Equal, Numの順
+		std::string name = ensureToken(Id).id;
+		ensureToken(Equal);
+		int value = ensureToken(Num).value;
+
+		//nametableに定数名とその値追加
+		nametable.addConst(name, value);
+		if (token.kind == Comma) {	//複数の定数宣言に対応
+			nextToken();
+			continue;
+		}
+		//最後はセミコロンがくるはず
+		ensureToken(Semicolon);
+		break;
+	}
+}
+
+void Compiler::compileIdentifier(std::string& name) {
+	TableEntry entry = nametable.search(name);
+	switch (entry.kind) {
+	case Const:
+		//仮想機械のスタックの戦闘に見つけてきた定数の数値を積む命令コードを出力
+		codebuilder.emitLit(entry.value);
+		break;
+	default:
+		//もしnametable上に存在しなければ
+		std::cerr << name << " is not in the name table. \n";
+		exit(1);
 	}
 }
