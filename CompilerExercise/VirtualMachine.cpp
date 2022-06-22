@@ -41,6 +41,15 @@ void VirtualMachine::run()
 		case jpc:
 			runJpc(inst);
 			break;
+		case ict:
+			runIct(inst);
+			break;
+		case sto:
+			runSto(inst);
+			break;
+		case lod:
+			runLod(inst);
+			break;
 		default:
 			break;
 
@@ -240,4 +249,22 @@ void VirtualMachine::runJpc(Inst inst) {
 	if (value == 0) {
 		pc = inst.index;
 	}
+}
+
+void VirtualMachine::runIct(Inst inst){
+	for (int i = 0; i < inst.value; i++) {
+		pushStack(0);
+	}
+}
+
+void VirtualMachine::runSto(Inst inst) {
+	int value = popStack();
+	int address = display.at(inst.level) + inst.relAddress;
+	stack.at(address) = value;
+}
+
+void VirtualMachine::runLod(Inst inst) {
+	int address = display.at(inst.level) + inst.relAddress;
+	int value = stack.at(address);
+	pushStack(value);
 }

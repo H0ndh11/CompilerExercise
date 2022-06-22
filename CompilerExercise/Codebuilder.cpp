@@ -92,3 +92,15 @@ void CodeBuilder::backPatch(int jmpInstIndex, int newIndex) {
 	//³‚µ‚¢ƒWƒƒƒ“ƒvæ‚ğindex‚Éİ’è‚·‚é
 	code.at(jmpInstIndex).index = newIndex;
 }
+
+int CodeBuilder::emitIct(int localAddress) {
+	return emit(Inst(ict, nop, localAddress, 0, 0, 0, 0));
+}
+
+int CodeBuilder::emitSto(int level, int relAddress) {
+	return emit(Inst(sto, nop, 0, level, 0, 0, relAddress));
+}
+
+int CodeBuilder::emitLod(int level, int relAddress) {
+	return emit(Inst(sto, nop, 0, level, 0, 0, relAddress));
+}

@@ -43,7 +43,7 @@ Token Source::nextToken() {
 	}
 
 	//記号の場合
-	if (isSymbolToken(ch)) {
+	if (isSymbolToken(ch)||ch==':') {
 		//各記号に応じてトークンを返す
 		if (ch == '.') {
 			nextChar();
@@ -114,12 +114,18 @@ Token Source::nextToken() {
 			nextChar();
 			return { Comma, "", 0 };
 		}
+		else if (ch == ':') {
+			nextChar();
+			if (ch == '=') {
+				nextChar();
+				return { Assign, "", 0 };
+			}
+		}
 	}
 	
 
 	//トークンが見つからなかった場合
-	Token tk = {nul, "", 0 };
-	return tk; 
+	return {nul, "", 0};
 }
 
 //数値トークンを読み出す処理を行う関数
@@ -182,6 +188,10 @@ Token Source::nextIdentifierOrKeywordToken() {
 		else if (value == "const") {
 			return { Const, "", 0 };
 		}
+		//var
+		else if (value == "var") {
+			return { Var, "", 0 };
+		}
 	}
 
 	//それ以外は変数(Id)としてトークンを返す
@@ -201,7 +211,7 @@ bool Source::isSymbolToken(char c) {
 
 //strが予約語（writeやwriteln, begin, endなど)の場合，trueを返す関数
 bool Source::isKeyword(std::string& str) {
-	if (str == "write" || str == "writeln"|| str == "begin" || str == "end" || str == "if" || str == "then" || str=="odd"|| str=="const") {
+	if (str == "write" || str == "writeln"|| str == "begin" || str == "end" || str == "if" || str == "then" || str=="odd"|| str=="const" || str=="var") {
 		return true;
 	}
 	else {
