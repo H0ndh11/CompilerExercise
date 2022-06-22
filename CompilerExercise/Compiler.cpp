@@ -317,6 +317,10 @@ void Compiler::compileAssign(std::string& name) {
 		std::cerr << "Cannot find the name " << name << "\n";
 		exit(1);
 	}
+	if (entry.kind != Var) {
+		std::cerr << "Ihs is not variable \n";
+		exit(1);
+	}
 	nextToken();
 	ensureToken(Assign);
 	compileExpression();
@@ -328,7 +332,7 @@ void Compiler::compileVarDecl() {
 		std::string name = ensureToken(Id).id;
 		nametable.addVar(name);
 
-		if (token.kind == Comma) {	//•¡”‚Ì’è”éŒ¾‚É‘Î‰ž
+		if (token.kind == Comma) {	//•¡”‚Ì•Ï”éŒ¾‚É‘Î‰ž
 			nextToken();
 			continue;
 		}
