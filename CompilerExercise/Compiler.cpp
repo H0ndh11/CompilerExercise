@@ -34,16 +34,10 @@ void Compiler::compileBlock() {
 			compileConstDecl();
 			continue;
 		}
-		if (token.kind == Var) {
-			nextToken();
-			compileVarDecl();
-			continue;
-		}
 		else {
 			break;
 		}
 	}
-	codebuilder.emitIct(nametable.localAddress);
 
 	//Statementへ
 	compileStatement();
@@ -68,9 +62,6 @@ void Compiler::compileStatement() {
 	case If:
 		nextToken();
 		compileIf();
-		break;
-	case Id:
-		compileAssign(token.id);
 		break;
 	default:
 		break;
@@ -301,39 +292,9 @@ void Compiler::compileIdentifier(std::string& name) {
 		//仮想機械のスタックの戦闘に見つけてきた定数の数値を積む命令コードを出力
 		codebuilder.emitLit(entry.value);
 		break;
-	case Var:
-		codebuilder.emitLod(entry.level, entry.relAdress);
-		break;
 	default:
 		//もしnametable上に存在しなければ
 		std::cerr << name << " is not in the name table. \n";
 		exit(1);
-	}
-}
-
-void Compiler::compileAssign(std::string& name) {
-	TableEntry entry = nametable.search(name);
-	if (entry.kind == nul) {
-		std::cerr << "Cannot find the name " << name << "\n";
-		exit(1);
-	}
-	nextToken();
-	ensureToken(Assign);
-	compileExpression();
-	codebuilder.emitSto(entry.level, entry.relAdress);
-}
-
-void Compiler::compileVarDecl() {
-	while (true) {
-		std::string name = ensureToken(Id).id;
-		nametable.addVar(name);
-
-		if (token.kind == Comma) {	//複数の定数宣言に対応
-			nextToken();
-			continue;
-		}
-		//最後はセミコロンがくるはず
-		ensureToken(Semicolon);
-		break;
 	}
 }

@@ -26,9 +26,3 @@ void NameTable::addConst(std::string& name, int value) {
 	//Š‡ŒÊ‚ª‘—¿‚Æˆá‚¤‚Ì‚Å’ˆÓ
 	table.push_back(TableEntry{ Const, name, value, 0, 0, 0 });
 }
-
-int NameTable::addVar(std::string& name) {
-	int relAddress = localAddress++;
-	table.push_back(TableEntry{ Var, name, 0, level, relAddress, 0 });
-	return relAddress;
-}
