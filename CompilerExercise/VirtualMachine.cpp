@@ -252,9 +252,8 @@ void VirtualMachine::runJpc(Inst inst) {
 }
 
 void VirtualMachine::runIct(Inst inst){
-	top += inst.value;
-	for (size_t i = 0; i < inst.value; i++) {
-		stack.push_back(0);
+	for (int i = 0; i < inst.value; i++) {
+		pushStack(0);
 	}
 }
 
