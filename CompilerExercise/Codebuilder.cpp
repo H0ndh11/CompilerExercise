@@ -102,5 +102,5 @@ int CodeBuilder::emitSto(int level, int relAddress) {
 }
 
 int CodeBuilder::emitLod(int level, int relAddress) {
-	return emit(Inst(sto, nop, 0, level, 0, 0, relAddress));
+	return emit(Inst(lod, nop, 0, level, 0, 0, relAddress));
 }

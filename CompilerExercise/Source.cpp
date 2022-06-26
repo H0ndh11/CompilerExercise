@@ -43,7 +43,7 @@ Token Source::nextToken() {
 	}
 
 	//記号の場合
-	if (isSymbolToken(ch)||ch==':') {
+	if (isSymbolToken(ch)) {
 		//各記号に応じてトークンを返す
 		if (ch == '.') {
 			nextChar();
@@ -114,12 +114,14 @@ Token Source::nextToken() {
 			nextChar();
 			return { Comma, "", 0 };
 		}
-		else if (ch == ':') {
+	}
+
+	//:=の場合
+	if (ch == ':') {
+		nextChar();
+		if (ch == '=') {
 			nextChar();
-			if (ch == '=') {
-				nextChar();
-				return { Assign, "", 0 };
-			}
+			return { Assign, "", 0 };
 		}
 	}
 	
