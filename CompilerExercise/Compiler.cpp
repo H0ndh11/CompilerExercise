@@ -72,6 +72,10 @@ void Compiler::compileStatement() {
 	case Id:
 		compileAssign(token.id);
 		break;
+	case While:
+		nextToken();
+		compileWhile();
+		break;
 	default:
 		break;
 	}
@@ -225,6 +229,16 @@ void Compiler::compileIf() {
 	ensureToken(Then);
 	int jpcInst = codebuilder.emitJpc(0);
 	compileStatement();
+	codebuilder.backPatch(jpcInst, codebuilder.currentIndex);
+}
+
+void Compiler::compileWhile() {
+	int startIndex = codebuilder.currentIndex;	//戻ってこれるようにアドレス記録
+	compileCondition();
+	ensureToken(Do);
+	int jpcInst = codebuilder.emitJpc(0);
+	compileStatement();
+	codebuilder.emitJmp(startIndex);
 	codebuilder.backPatch(jpcInst, codebuilder.currentIndex);
 }
 
