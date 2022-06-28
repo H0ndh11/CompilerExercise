@@ -88,6 +88,10 @@ int CodeBuilder::emitJpc(int index) {
 	return emit(Inst(jpc, nop, 0, 0, 0, index, 0));
 }
 
+int CodeBuilder::emitJmp(int index) {
+	return emit(Inst(jmp, nop, 0, 0, 0, index, 0));
+}
+
 void CodeBuilder::backPatch(int jmpInstIndex, int newIndex) {
 	//³‚µ‚¢ƒWƒƒƒ“ƒvæ‚ğindex‚Éİ’è‚·‚é
 	code.at(jmpInstIndex).index = newIndex;

@@ -194,6 +194,14 @@ Token Source::nextIdentifierOrKeywordToken() {
 		else if (value == "var") {
 			return { Var, "", 0 };
 		}
+		//while
+		else if (value == "while") {
+			return { While, "", 0 };
+		}
+		//do
+		else if (value == "do") {
+			return { Do, "", 0 };
+		}
 	}
 
 	//それ以外は変数(Id)としてトークンを返す
@@ -213,7 +221,7 @@ bool Source::isSymbolToken(char c) {
 
 //strが予約語（writeやwriteln, begin, endなど)の場合，trueを返す関数
 bool Source::isKeyword(std::string& str) {
-	if (str == "write" || str == "writeln"|| str == "begin" || str == "end" || str == "if" || str == "then" || str=="odd"|| str=="const" || str=="var") {
+	if (str == "write" || str == "writeln"|| str == "begin" || str == "end" || str == "if" || str == "then" || str=="odd"|| str=="const" || str=="var" || str== "while" || str =="do") {
 		return true;
 	}
 	else {

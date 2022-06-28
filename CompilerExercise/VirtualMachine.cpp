@@ -50,6 +50,9 @@ void VirtualMachine::run()
 		case lod:
 			runLod(inst);
 			break;
+		case jmp:
+			runJmp(inst);
+			break;
 		default:
 			break;
 
@@ -249,6 +252,10 @@ void VirtualMachine::runJpc(Inst inst) {
 	if (value == 0) {
 		pc = inst.index;
 	}
+}
+
+void VirtualMachine::runJmp(Inst inst) {
+	pc = inst.index;
 }
 
 void VirtualMachine::runIct(Inst inst){
