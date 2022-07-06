@@ -32,3 +32,50 @@ int NameTable::addVar(std::string& name) {
 	table.push_back(TableEntry{ Var, name, 0, level, relAddress, 0 });
 	return relAddress;
 }
+
+int NameTable::addFunction(std::string& name, int index) {
+	//currentFunctionAddressに記号表における関数の位置を保存する
+	currentFunctionAddress = table.size();
+
+	//記号表に関数の情報を追加
+	table.push_back(TableEntry{ Func, name, 0, level++, index, 0 });
+
+	//現在のレベルの情報保存
+	display.push_back(DisplayEntry{ (int)table.size(), localAddress });
+
+	//新しく追加する関数のlocalAddressを初期化
+	localAddress = 2;
+
+	return currentFunctionAddress;
+}
+
+int NameTable::addParam(std::string& name) {
+	int address = table.size();
+	table.push_back(TableEntry{ Param, name, 0, level, 0, 0 });
+
+	//新しく追加した引数を取る関数のnumParamsをインクリメント
+	table.at(currentFunctionAddress).numParams++;
+
+	//新しく追加された変数の記号表における位置を返す．
+	return address;
+}
+
+void NameTable::endParameters() {
+	int numParams = table.at(currentFunctionAddress).numParams;
+	for (size_t i = 1; i <= numParams; i++) {
+		table.at(currentFunctionAddress + i).relAdress = i - 1 - numParams;
+	}
+}
+
+void NameTable::endFunction() {
+	DisplayEntry de = display.back();
+	display.pop_back();
+	table.resize(de.address);
+	localAddress = de.localAdrdess;
+	level--;
+}
+
+int NameTable::currentFunctionNumParams() {
+	return table.at(currentFunctionAddress).numParams;
+}
+

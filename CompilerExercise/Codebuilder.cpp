@@ -108,3 +108,7 @@ int CodeBuilder::emitSto(int level, int relAddress) {
 int CodeBuilder::emitLod(int level, int relAddress) {
 	return emit(Inst(lod, nop, 0, level, 0, 0, relAddress));
 }
+
+int CodeBuilder::emitCal(int level, int index) {
+	return emit(Inst(cal, nop, 0, level, 0, index, 0));
+}

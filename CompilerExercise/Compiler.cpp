@@ -27,6 +27,7 @@ std::vector<Inst> Compiler::compile()
 }
 
 void Compiler::compileBlock() {
+	int jmpInst = codebuilder.emitJmp(0);
 	//ConstDeclが0回以上ループ
 	while (true) {
 		if (token.kind == Const) {
@@ -39,10 +40,18 @@ void Compiler::compileBlock() {
 			compileVarDecl();
 			continue;
 		}
+		if (token.kind == Func) {
+			nextToken();
+			compileFunctionDecl();
+			continue;
+		}
 		else {
 			break;
 		}
 	}
+
+	codebuilder.backPatch(jmpInst, codebuilder.currentIndex);
+
 	codebuilder.emitIct(nametable.localAddress);
 
 	//Statementへ
@@ -75,6 +84,10 @@ void Compiler::compileStatement() {
 	case While:
 		nextToken();
 		compileWhile();
+		break;
+	case Ret:
+		nextToken();
+		compileRet();
 		break;
 	default:
 		break;
@@ -232,13 +245,13 @@ void Compiler::compileIf() {
 	codebuilder.backPatch(jpcInst, codebuilder.currentIndex);
 }
 
-void Compiler::compileWhile() {
+void Compiler::compileWhile() {	//compileIfにループ動作を加える
 	int startIndex = codebuilder.currentIndex;	//戻ってこれるようにアドレス記録
 	compileCondition();
 	ensureToken(Do);
 	int jpcInst = codebuilder.emitJpc(0);
 	compileStatement();
-	codebuilder.emitJmp(startIndex);
+	codebuilder.emitJmp(startIndex);	//topが0ならループ
 	codebuilder.backPatch(jpcInst, codebuilder.currentIndex);
 }
 
@@ -318,6 +331,12 @@ void Compiler::compileIdentifier(std::string& name) {
 	case Var:
 		codebuilder.emitLod(entry.level, entry.relAdress);
 		break;
+	case Param:
+		codebuilder.emitLod(entry.level, entry.relAdress);
+		break;
+	case Func:
+		compileCall(entry);
+		break;
 	default:
 		//もしnametable上に存在しなければ
 		std::cerr << name << " is not in the name table. \n";
@@ -354,4 +373,57 @@ void Compiler::compileVarDecl() {
 		ensureToken(Semicolon);
 		break;
 	}
+}
+
+void Compiler::compileFunctionDecl() {
+	std::string functionName = ensureToken(Id).id;
+	nametable.addFunction(functionName, codebuilder.currentIndex);
+	ensureToken(Lparen);
+
+	while (true)
+	{
+		if (token.kind == Id) {
+			std::string name = token.id;
+			nametable.addParam(name);
+			nextToken();
+			if (token.kind == Comma) {
+				nextToken();
+				continue;
+			}
+		}
+		ensureToken(Rparen);
+		break;
+	}
+
+	nametable.endParameters();
+	compileBlock();
+	nametable.endFunction();
+	ensureToken(Semicolon);
+
+}
+
+void Compiler::compileCall(TableEntry& entry) {
+	//func(x,y+z,...)における(x,y+z,...)の部分を処理
+	ensureToken(Lparen);
+	while (true) {
+		if (token.kind == Rparen) {
+			nextToken();
+			break;
+		}
+		compileExpression();
+		if (token.kind == Comma) {
+			nextToken();
+			continue;
+		}
+		ensureToken(Rparen);
+		break;
+	}
+
+	//cal命令の出力
+	codebuilder.emitCal(entry.level, entry.relAdress);
+}
+
+void Compiler::compileRet() {
+	compileExpression();
+	codebuilder.emitRet(nametable.level, nametable.currentFunctionNumParams());
 }
