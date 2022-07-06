@@ -53,6 +53,9 @@ void VirtualMachine::run()
 		case jmp:
 			runJmp(inst);
 			break;
+		case cal:
+			runCal(inst);
+			break;
 		default:
 			break;
 
@@ -254,6 +257,7 @@ void VirtualMachine::runJpc(Inst inst) {
 	}
 }
 
+//jmp命令は命令を必要としないjpc命令
 void VirtualMachine::runJmp(Inst inst) {
 	pc = inst.index;
 }
@@ -275,4 +279,24 @@ void VirtualMachine::runLod(Inst inst) {
 	int address = display.at(inst.level) + inst.relAddress;
 	int value = stack.at(address);
 	pushStack(value);
+}
+
+void VirtualMachine::runCal(Inst inst) {
+	int level = inst.level + 1;	//現在のレベルを計算
+	//必要に応じてスタックを増やす
+	//
+	for (size_t i = 0; i < 2; i++) {
+		stack.push_back(0);
+	}
+	if (display.size() == level) {
+		display.push_back(-1);
+	}
+
+	//displayとpcの退避
+	stack.at(top) = display.at(level);
+	stack.at(top + 1) = pc;
+
+	//displayとpcの更新
+	display.at(level) = top;
+	pc = inst.index;
 }
